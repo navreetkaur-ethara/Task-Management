@@ -20,9 +20,14 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+// Health check endpoint for Railway
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
 // Serve frontend in production
 const path = require('path');
-const frontendPath = path.join(__dirname, '../frontend/dist');
+const frontendPath = path.join(__dirname, '../client/dist');
 app.use(express.static(frontendPath));
 
 app.use((req, res) => {
