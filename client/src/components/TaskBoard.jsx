@@ -27,7 +27,7 @@ export default function TaskBoard({ tasks, project, fetchTasks }) {
     }
   };
 
-  const isAdmin = project.admin?._id === user.id || project.admin === user.id;
+  const isAdmin = project.admin?.id === user.id || project.admin === user.id;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
@@ -42,18 +42,18 @@ export default function TaskBoard({ tasks, project, fetchTasks }) {
           
           <div className="space-y-4">
             {tasks.filter(t => t.status === status).map(task => (
-              <div key={task._id} className="card p-4 hover:border-primary-500/30 transition-colors group relative cursor-grab active:cursor-grabbing">
+              <div key={task.id} className="card p-4 hover:border-primary-500/30 transition-colors group relative cursor-grab active:cursor-grabbing">
                 <div className="flex justify-between items-start mb-2">
                   <span className={`text-xs px-2 py-1 rounded-md border ${priorityColors[task.priority]}`}>
                     {task.priority}
                   </span>
                   {/* Status Dropdown (only if assigned or admin) */}
-                  {(isAdmin || task.assignedTo?._id === user.id) && (
+                  {(isAdmin || task.assignedTo?.id === user.id) && (
                     <select 
                       className="bg-dark-900 text-gray-400 text-xs rounded border border-dark-700 p-1 focus:ring-primary-500"
                       value={task.status}
-                      onChange={(e) => handleStatusChange(task._id, e.target.value)}
-                      disabled={updating === task._id}
+                      onChange={(e) => handleStatusChange(task.id, e.target.value)}
+                      disabled={updating === task.id}
                     >
                       {statuses.map(s => (
                         <option key={s} value={s}>{s}</option>

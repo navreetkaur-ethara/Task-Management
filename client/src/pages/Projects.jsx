@@ -69,8 +69,8 @@ export default function Projects() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
             <Link 
-              key={project._id} 
-              to={`/projects/${project._id}`}
+              key={project.id} 
+              to={`/projects/${project.id}`}
               className="card group hover:border-primary-500/50 transition-colors flex flex-col h-full"
             >
               <div className="flex-grow">

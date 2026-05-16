@@ -78,7 +78,7 @@ export default function ProjectDetails() {
   if (loading) return <div className="flex-grow flex items-center justify-center text-gray-400">Loading project...</div>;
   if (error) return <div className="flex-grow flex items-center justify-center text-red-400">{error}</div>;
 
-  const isAdmin = project.admin?._id === user.id;
+  const isAdmin = project.admin?.id === user.id;
 
   return (
     <div className="max-w-7xl mx-auto w-full p-6">
@@ -99,7 +99,7 @@ export default function ProjectDetails() {
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2 mr-4">
               {project.members.slice(0, 5).map(member => (
-                <div key={member._id} className="w-8 h-8 rounded-full bg-dark-700 border-2 border-dark-900 flex items-center justify-center text-xs font-bold text-gray-300" title={member.name}>
+                <div key={member.id} className="w-8 h-8 rounded-full bg-dark-700 border-2 border-dark-900 flex items-center justify-center text-xs font-bold text-gray-300" title={member.name}>
                   {member.name.charAt(0).toUpperCase()}
                 </div>
               ))}
@@ -169,7 +169,7 @@ export default function ProjectDetails() {
                 <select className="input-field" value={newTask.assignedTo} onChange={(e) => setNewTask({...newTask, assignedTo: e.target.value})}>
                   <option value="">Unassigned</option>
                   {project.members.map(m => (
-                    <option key={m._id} value={m._id}>{m.name}</option>
+                    <option key={m.id} value={m.id}>{m.name}</option>
                   ))}
                 </select>
               </div>
