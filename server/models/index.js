@@ -1,12 +1,22 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'postgres',
-  logging: false, // Set to console.log to see SQL queries
-  dialectOptions: {
-    ssl: process.env.NODE_ENV === 'production' ? { require: true, rejectUnauthorized: false } : false
-  }
-});
+let sequelize;
+
+if (process.env.NODE_ENV === 'production') {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    logging: false, // Set to console.log to see SQL queries
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false }
+    }
+  });
+} else {
+  sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './database.sqlite', // File-based SQLite database for local development
+    logging: false
+  });
+}
 
 const User = require('./User')(sequelize);
 const Project = require('./Project')(sequelize);

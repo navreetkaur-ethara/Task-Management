@@ -33,14 +33,14 @@ const startServer = async () => {
   try {
     const databaseUrl = process.env.DATABASE_URL;
 
-    if (!databaseUrl) {
-      console.error('DATABASE_URL environment variable is not set');
+    if (process.env.NODE_ENV === 'production' && !databaseUrl) {
+      console.error('DATABASE_URL environment variable is not set for production');
       process.exit(1);
     }
 
-    // Connect PostgreSQL
+    // Connect Database
     await sequelize.authenticate();
-    console.log('Connected to PostgreSQL database');
+    console.log(`Connected to ${process.env.NODE_ENV === 'production' ? 'PostgreSQL' : 'SQLite'} database`);
     
     // Sync models
     await sequelize.sync({ alter: true }); // Automatically updates schema
