@@ -1,0 +1,47 @@
+import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
+
+export const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      let token = localStorage.getItem('token');
+      if (token) {
+        try {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          const res = await axios.get('http://localhost:5000/api/auth/me');
+          setUser(res.data);
+        } catch (error) {
+          console.error("Token invalid or expired", error);
+          localStorage.removeItem('token');
+          delete axios.defaults.headers.common['Authorization'];
+        }
+      }
+      setLoading(false);
+    };
+
+    checkLoggedIn();
+  }, []);
+
+  const login = (token, userData) => {
+    localStorage.setItem('token', token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setUser(userData);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
