@@ -1,13 +1,32 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
 
-const taskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  dueDate: { type: Date },
-  priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Medium' },
-  status: { type: String, enum: ['To Do', 'In Progress', 'Done'], default: 'To Do' },
-  project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required: true },
-  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-}, { timestamps: true });
+module.exports = (sequelize) => {
+  const Task = sequelize.define('Task', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+    },
+    dueDate: {
+      type: DataTypes.DATE,
+    },
+    priority: {
+      type: DataTypes.ENUM('Low', 'Medium', 'High'),
+      defaultValue: 'Medium',
+    },
+    status: {
+      type: DataTypes.ENUM('To Do', 'In Progress', 'Done'),
+      defaultValue: 'To Do',
+    }
+    // projectId and assignedToId are handled by associations in index.js
+  });
 
-module.exports = mongoose.model('Task', taskSchema);
+  return Task;
+};

@@ -1,10 +1,21 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
 
-const projectSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: { type: String },
-  admin: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-}, { timestamps: true });
+module.exports = (sequelize) => {
+  const Project = sequelize.define('Project', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+    }
+    // adminId is handled by associations in index.js
+  });
 
-module.exports = mongoose.model('Project', projectSchema);
+  return Project;
+};
